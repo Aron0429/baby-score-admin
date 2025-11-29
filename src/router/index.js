@@ -2,7 +2,7 @@
  * @Description:
  * @Author: HuGang
  * @Date: 2025-11-25 16:18:42
- * @LastEditTime: 2025-11-25 16:28:10
+ * @LastEditTime: 2025-11-29 21:00:44
  */
 import { createWebHashHistory, createRouter } from 'vue-router'
 import { useNavStore } from '@/stores/nav'
@@ -123,7 +123,8 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const routes = router.getRoutes()
-  const hasRoute = routes.find(route => route.path == to.path)
+  const menuRoutes = routes.filter(route => route.meta && route.meta.isShow && !route.meta.hidden)
+  const hasRoute = menuRoutes.find(route => route.path == to.path)
 
   if (hasRoute) {
     const navStore = useNavStore()

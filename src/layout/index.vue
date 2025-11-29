@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: HuGang
  * @Date: 2025-11-25 16:19:48
- * @LastEditTime: 2025-11-25 16:30:13
+ * @LastEditTime: 2025-11-29 17:50:23
 -->
 <template>
   <div class="common-layout">
@@ -63,7 +63,7 @@ const updateIsCollapse = value => {
       overflow: hidden;
 
       .layout-content {
-        padding: 15px;
+        padding: 20px;
         background-color: #fff;
         height: 100%;
         overflow-y: auto;
