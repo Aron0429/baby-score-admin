@@ -2,7 +2,7 @@
  * @Description:
  * @Author: HuGang
  * @Date: 2025-11-25 16:18:42
- * @LastEditTime: 2025-11-29 21:00:44
+ * @LastEditTime: 2025-11-30 14:42:03
  */
 import { createWebHashHistory, createRouter } from 'vue-router'
 import { useNavStore } from '@/stores/nav'
@@ -37,35 +37,6 @@ const routes = [
         },
       },
       {
-        path: '/system',
-        name: 'system',
-        meta: {
-          title: '系统管理',
-          icon: 'Setting',
-          isShow: true,
-        },
-        children: [
-          {
-            path: '/system/user',
-            name: 'user',
-            component: () => import('@/views/system/user/index.vue'),
-            meta: {
-              title: '用户管理',
-              icon: 'User',
-            },
-          },
-          {
-            path: '/system/role',
-            name: 'role',
-            component: () => import('@/views/system/role/index.vue'),
-            meta: {
-              title: '角色管理',
-              icon: 'UserFilled',
-            },
-          },
-        ],
-      },
-      {
         path: '/information',
         name: 'information',
         meta: {
@@ -75,8 +46,26 @@ const routes = [
         },
         children: [
           {
+            path: '/information/user',
+            name: 'user',
+            component: () => import('@/views/information/user.vue'),
+            meta: {
+              title: '用户管理',
+              icon: 'User',
+            },
+          },
+          {
+            path: '/information/baby',
+            name: 'userBaby',
+            component: () => import('@/views/information/baby.vue'),
+            meta: {
+              title: '宝贝管理',
+              icon: 'User',
+            },
+          },
+          {
             path: '/information/target',
-            name: 'informationTarget',
+            name: 'BabyTarget',
             component: () => import('@/views/information/target.vue'),
             meta: {
               title: '目标管理',
@@ -85,20 +74,49 @@ const routes = [
           },
           {
             path: '/information/targetType',
-            name: 'informationTargetType',
+            name: 'BabyTargetType',
             component: () => import('@/views/information/targetType.vue'),
             meta: {
-              title: '目标分类',
+              title: '分类管理',
+              icon: 'Collection',
+            },
+          },
+        ],
+      },
+      {
+        path: '/system',
+        name: 'system',
+        meta: {
+          title: '系统管理',
+          icon: 'Setting',
+          isShow: true,
+        },
+        children: [
+          {
+            path: '/system/target',
+            name: 'systemTarget',
+            component: () => import('@/views/system/target.vue'),
+            meta: {
+              title: '预设目标',
+              icon: 'Tickets',
+            },
+          },
+          {
+            path: '/system/targetType',
+            name: 'systemTargetType',
+            component: () => import('@/views/system/targetType.vue'),
+            meta: {
+              title: '预设分类',
               icon: 'Collection',
             },
           },
           {
-            path: '/information/wish',
-            name: 'informationWish',
-            component: () => import('@/views/information/wish.vue'),
+            path: '/system/wish',
+            name: 'systemWish',
+            component: () => import('@/views/system/wish.vue'),
             meta: {
-              title: '心愿管理',
-              icon: 'Collection',
+              title: '预设心愿',
+              icon: 'Star',
             },
           },
         ],
