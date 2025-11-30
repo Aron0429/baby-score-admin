@@ -24,7 +24,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
 import { useNavStore } from '@/stores/nav'
 
 const store = useNavStore()
