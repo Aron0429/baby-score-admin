@@ -42,7 +42,7 @@ import utils from '@/utils'
 import { queryUsers } from '@/apis'
 
 const queryForm = ref({
-  publicId: null,
+  publicId: '',
 })
 
 const state = ref({

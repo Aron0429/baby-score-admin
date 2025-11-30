@@ -2,7 +2,7 @@
  * @Description:
  * @Author: HuGang
  * @Date: 2025-11-25 16:18:42
- * @LastEditTime: 2025-11-30 14:42:03
+ * @LastEditTime: 2025-12-01 01:50:01
  */
 import { createWebHashHistory, createRouter } from 'vue-router'
 import { useNavStore } from '@/stores/nav'
@@ -43,6 +43,7 @@ const routes = [
           title: '数据管理',
           icon: 'Coin',
           isShow: true,
+          isSub: true,
         },
         children: [
           {
@@ -90,6 +91,7 @@ const routes = [
           title: '系统管理',
           icon: 'Setting',
           isShow: true,
+          isSub: true,
         },
         children: [
           {
@@ -141,8 +143,8 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const routes = router.getRoutes()
-  const menuRoutes = routes.filter(route => route.meta && route.meta.isShow && !route.meta.hidden)
-  const hasRoute = menuRoutes.find(route => route.path == to.path)
+  const filterRoutes = routes.filter(route => route.meta && !route.meta.hidden && !route.meta.isSub)
+  const hasRoute = filterRoutes.find(route => route.path == to.path)
 
   if (hasRoute) {
     const navStore = useNavStore()
