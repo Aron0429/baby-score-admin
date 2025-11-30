@@ -19,7 +19,7 @@ const routes = [
   },
   {
     path: '/',
-    component: () => import('@/layout/index.vue'),
+    component: () => import('@/views/layout/index.vue'),
     redirect: '/home',
     meta: {
       title: '根目录',
@@ -37,8 +37,8 @@ const routes = [
         },
       },
       {
-        path: '/information',
-        name: 'information',
+        path: '/account',
+        name: 'account',
         meta: {
           title: '数据管理',
           icon: 'Coin',
@@ -46,36 +46,36 @@ const routes = [
         },
         children: [
           {
-            path: '/information/user',
+            path: '/account/user',
             name: 'user',
-            component: () => import('@/views/information/user.vue'),
+            component: () => import('@/views/account/user.vue'),
             meta: {
               title: '用户管理',
               icon: 'User',
             },
           },
           {
-            path: '/information/baby',
+            path: '/account/baby',
             name: 'userBaby',
-            component: () => import('@/views/information/baby.vue'),
+            component: () => import('@/views/account/baby.vue'),
             meta: {
               title: '宝贝管理',
               icon: 'User',
             },
           },
           {
-            path: '/information/target',
+            path: '/account/target',
             name: 'BabyTarget',
-            component: () => import('@/views/information/target.vue'),
+            component: () => import('@/views/account/target.vue'),
             meta: {
               title: '目标管理',
               icon: 'Tickets',
             },
           },
           {
-            path: '/information/targetType',
+            path: '/account/targetType',
             name: 'BabyTargetType',
-            component: () => import('@/views/information/targetType.vue'),
+            component: () => import('@/views/account/targetType.vue'),
             meta: {
               title: '分类管理',
               icon: 'Collection',
