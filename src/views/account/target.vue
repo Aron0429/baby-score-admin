@@ -14,15 +14,19 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="state.tableData" stripe border style="width: 100%">
-      <el-table-column label="ID">
+    <el-table :data="state.tableData" stripe border style="width: 100%" max-height="640px">
+      <el-table-column label="id">
         <template #default="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="目标名称" prop="name"></el-table-column>
-      <el-table-column label="所属分类" prop="parentId"></el-table-column>
-      <el-table-column label="评分方式" prop="score"></el-table-column>
+      <el-table-column label="评分方式" prop="score">
+        <template #default="scope">
+          <span>{{ scope.row.fixed == 1 ? '固定评分' : '自由评分' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="所属宝贝ID" prop="babyId"></el-table-column>
       <el-table-column label="创建时间" prop="createAt"></el-table-column>
       <el-table-column label="更新时间" prop="updateAt"></el-table-column>
       <el-table-column label="操作" width="180">
@@ -31,12 +35,22 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination
+      v-if="state.totalCount >= pageState.pageSize"
+      :total="state.totalCount"
+      :pageSize="pageState.pageSize"
+      :currentPage="pageState.page"
+      @changeSize="changeSize"
+      @changeCurrent="changeCurrent"
+    ></pagination>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import utils from '@/utils'
+
+import pagination from '@/components/pagination.vue'
 
 import { queryTargetList, targetDelete } from '@/apis/account.js'
 
@@ -46,17 +60,19 @@ const queryForm = ref({
 })
 
 const state = ref({
-  sex: [
-    { label: '男', value: 1 },
-    { label: '女', value: 2 },
-  ],
   tableData: [],
+  totalCount: 0,
+})
+
+const pageState = ref({
+  page: 1,
+  pageSize: 10,
 })
 
 fetchTargets()
 
-async function fetchBabys() {
-  const res = await queryTargetList(queryForm.value)
+async function fetchTargets() {
+  const res = await queryTargetList({ ...queryForm.value, ...pageState.value })
   if (res.code == 200) {
     state.value.tableData = res.data.list.map(item => {
       item.createAt = utils.transforDate(item.createAt)
@@ -64,6 +80,16 @@ async function fetchBabys() {
       return item
     })
   }
+}
+
+const changeSize = size => {
+  pageState.value.pageSize = size
+  fetchTargets()
+}
+
+const changeCurrent = num => {
+  pageState.value.page = num
+  fetchTargets()
 }
 
 async function handleDelete(row) {

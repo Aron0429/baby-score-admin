@@ -13,7 +13,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="state.tableData" stripe border style="width: 100%">
+    <el-table :data="state.tableData" stripe border style="width: 100%" max-height="640px">
       <el-table-column label="ID">
         <template #default="scope">
           <span>{{ scope.row.id }}</span>
@@ -36,6 +36,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination
+      v-if="state.totalCount >= pageState.pageSize"
+      :total="state.totalCount"
+      :pageSize="pageState.pageSize"
+      :currentPage="pageState.page"
+      @changeSize="changeSize"
+      @changeCurrent="changeCurrent"
+    ></pagination>
     <el-dialog v-model="state.dialogVisible" title="修改用户身份" width="400">
       <el-form :model="params">
         <el-form-item label="昵称" label-width="80px">
@@ -64,6 +72,8 @@
 import { ref } from 'vue'
 import utils from '@/utils'
 
+import pagination from '@/components/pagination.vue'
+
 import { queryBabys, babyDelete } from '@/apis/account.js'
 
 const queryForm = ref({
@@ -77,7 +87,13 @@ const state = ref({
     { label: '女', value: 2 },
   ],
   tableData: [],
+  totalCount: 0,
   dialogVisible: false,
+})
+
+const pageState = ref({
+  page: 1,
+  pageSize: 10,
 })
 
 const params = ref({
@@ -89,7 +105,7 @@ const params = ref({
 fetchBabys()
 
 async function fetchBabys() {
-  const res = await queryBabys(queryForm.value)
+  const res = await queryBabys({ ...queryForm.value, ...pageState.value })
   if (res.code == 200) {
     state.value.tableData = res.data.list.map(item => {
       item.createAt = utils.transforDate(item.createAt)
@@ -97,6 +113,16 @@ async function fetchBabys() {
       return item
     })
   }
+}
+
+const changeSize = size => {
+  pageState.value.pageSize = size
+  fetchBabys()
+}
+
+const changeCurrent = num => {
+  pageState.value.page = num
+  fetchBabys()
 }
 
 const handleEdit = (index, row) => {

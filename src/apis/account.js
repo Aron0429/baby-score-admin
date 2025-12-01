@@ -27,13 +27,13 @@ export const babyDelete = async (babyId, params) => {
 
 // ---------目标管理--------
 // 查询(全部)宝贝目标列表
-export const queryTargetList = async (babyId, params) => {
-  const res = await Request.get(`/target/list/${babyId}`, params)
+export const queryTargetList = async params => {
+  const res = await Request.get('/admin/babyTargets', params)
   return res.data
 }
 
 // 删除目标
-export const targetDelete = async (targetId, params) => {
-  const res = await Request.delete(`/target/delete/${targetId}`, params)
+export const targetDelete = async params => {
+  const res = await Request.delete('/target/delete', params)
   return res.data
 }

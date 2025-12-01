@@ -10,7 +10,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="state.tableData" stripe border style="width: 100%">
+    <el-table :data="state.tableData" stripe border style="width: 100%" max-height="640px">
       <el-table-column label="ID">
         <template #default="scope">
           <span>{{ scope.row.publicId }}</span>
@@ -35,6 +35,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination
+      v-if="state.totalCount >= pageState.pageSize"
+      :total="state.totalCount"
+      :pageSize="pageState.pageSize"
+      :currentPage="pageState.page"
+      @changeSize="changeSize"
+      @changeCurrent="changeCurrent"
+    ></pagination>
     <el-dialog v-model="state.dialogVisible" title="修改用户身份" width="300">
       <el-form>
         <el-form-item label="身份" :label-width="formLabelWidth">
@@ -57,6 +65,8 @@
 import { ref } from 'vue'
 import utils from '@/utils'
 
+import pagination from '@/components/pagination.vue'
+
 import { queryUsers, queryUserTypeList } from '@/apis/account.js'
 
 const queryForm = ref({
@@ -65,9 +75,15 @@ const queryForm = ref({
 
 const state = ref({
   tableData: [],
+  totalCount: 0,
   userTypeList: [],
   userTypeObj: {},
   dialogVisible: false,
+})
+
+const pageState = ref({
+  page: 1,
+  pageSize: 10,
 })
 
 const params = ref({
@@ -82,7 +98,7 @@ const pageInit = () => {
 pageInit()
 
 async function fetchUsers() {
-  const res = await queryUsers(queryForm.value)
+  const res = await queryUsers({ ...queryForm.value, ...pageState.value })
   if (res.code == 200) {
     state.value.tableData = res.data.list.map(item => {
       item.createAt = utils.transforDate(item.createAt)
@@ -90,6 +106,16 @@ async function fetchUsers() {
       return item
     })
   }
+}
+
+const changeSize = size => {
+  pageState.value.pageSize = size
+  fetchUsers()
+}
+
+const changeCurrent = num => {
+  pageState.value.page = num
+  fetchUsers()
 }
 
 async function fetchUserTypeList() {
