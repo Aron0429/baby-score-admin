@@ -21,17 +21,35 @@
           <span>{{ scope.row.openid ? `微信用户[${scope.row.openid}]` : `App用户[${scope.row.email}]` }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用户身份" prop="typeId"></el-table-column>
+      <el-table-column label="用户身份">
+        <template #default="scope">
+          <span>{{ state.userTypeObj[scope.row.typeId] }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="当前宝贝ID" prop="currentBabyId"></el-table-column>
       <el-table-column label="创建时间" prop="createAt"></el-table-column>
       <el-table-column label="更新时间" prop="updateAt"></el-table-column>
       <el-table-column label="操作" width="180">
         <template #default="scope">
-          <el-button @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button @click="handleEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog v-model="state.dialogVisible" title="修改用户身份" width="300">
+      <el-form>
+        <el-form-item label="身份" :label-width="formLabelWidth">
+          <el-select v-model="params.typeId">
+            <el-option v-for="item in state.userTypeList" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="handleCancel">取消</el-button>
+          <el-button type="primary" @click="handleConfirm">确定</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -39,7 +57,7 @@
 import { ref } from 'vue'
 import utils from '@/utils'
 
-import { queryUsers } from '@/apis/account.js'
+import { queryUsers, queryUserTypeList } from '@/apis/account.js'
 
 const queryForm = ref({
   publicId: '',
@@ -47,28 +65,59 @@ const queryForm = ref({
 
 const state = ref({
   tableData: [],
+  userTypeList: [],
+  userTypeObj: {},
+  dialogVisible: false,
 })
 
-const handleEdit = (index, row) => {
-  console.log(index, row)
+const params = ref({
+  typeId: null,
+})
+
+const pageInit = () => {
+  fetchUsers()
+  fetchUserTypeList()
 }
-const handleDelete = (index, row) => {
-  console.log(index, row)
-}
+
+pageInit()
 
 async function fetchUsers() {
   const res = await queryUsers(queryForm.value)
-  const needhms = true
   if (res.code == 200) {
-    state.value.tableData = res.data.map(item => {
-      item.createAt = utils.transforDate(item.createAt, needhms)
-      item.updateAt = utils.transforDate(item.updateAt, needhms)
+    state.value.tableData = res.data.list.map(item => {
+      item.createAt = utils.transforDate(item.createAt)
+      item.updateAt = utils.transforDate(item.updateAt)
       return item
     })
   }
 }
 
-fetchUsers()
+async function fetchUserTypeList() {
+  state.value.typeList = []
+  const res = await queryUserTypeList()
+  if (res.code === 200) {
+    if (res.data.length > 0) {
+      res.data.forEach(item => {
+        state.value.userTypeList.push({ label: item.name, value: item.id })
+        state.value.userTypeObj[item.id] = item.name
+      })
+    }
+  }
+}
+
+const handleEdit = row => {
+  params.value.typeId = row.typeId
+  state.value.dialogVisible = true
+}
+
+const handleCancel = () => {
+  state.value.dialogVisible = false
+}
+
+async function handleConfirm() {
+  state.value.dialogVisible = false
+  console.log(params.value.typeId)
+}
 </script>
 
 <style lang="scss" scoped>
