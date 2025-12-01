@@ -9,7 +9,7 @@
           <el-input v-model="queryForm.publicId" placeholder="请输入用户ID" clearable />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="fetchUsers">查询</el-button>
+          <el-button type="primary" @click="fetchBabys">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -86,9 +86,9 @@ const params = ref({
   score: '',
 })
 
-fetchUsers()
+fetchBabys()
 
-async function fetchUsers() {
+async function fetchBabys() {
   const res = await queryBabys(queryForm.value)
   if (res.code == 200) {
     state.value.tableData = res.data.list.map(item => {
@@ -112,7 +112,7 @@ async function handleDelete(row) {
   const res = await babyDelete(row.id)
   if (res.code === 200) {
     utils.showToast('删除成功')
-    fetchUsers()
+    fetchBabys()
   }
 }
 
