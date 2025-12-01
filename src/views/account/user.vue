@@ -39,7 +39,7 @@
 import { ref } from 'vue'
 import utils from '@/utils'
 
-import { queryUsers } from '@/apis'
+import { queryUsers } from '@/apis/account.js'
 
 const queryForm = ref({
   publicId: '',

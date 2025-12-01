@@ -26,7 +26,7 @@
 import { ref } from 'vue'
 import utils from '@/utils'
 
-import { queryTargetTypes } from '@/apis'
+import { queryTargetTypes } from '@/apis/system.js'
 
 const state = ref({
   tableData: [],
