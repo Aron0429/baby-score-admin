@@ -3,7 +3,7 @@
     <div class="search-container">
       <el-form :inline="true" :model="queryForm" class="demo-form-inline">
         <el-form-item label="宝贝名称">
-          <el-input v-model="queryForm.babyNmae" placeholder="请输入宝贝名称" clearable />
+          <el-input v-model="queryForm.babyName" placeholder="请输入宝贝名称" clearable />
         </el-form-item>
         <el-form-item label="用户ID">
           <el-input v-model="queryForm.publicId" placeholder="请输入用户ID" clearable />
@@ -67,7 +67,7 @@ import utils from '@/utils'
 import { queryBabys, babyDelete } from '@/apis/account.js'
 
 const queryForm = ref({
-  babyNmae: '',
+  babyName: '',
   publicId: null,
 })
 
