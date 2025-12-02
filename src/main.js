@@ -14,6 +14,8 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 
 import './style.scss'
+import '../src/static/css/public.scss'
+
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 const app = createApp(App)
